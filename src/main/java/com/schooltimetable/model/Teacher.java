@@ -5,15 +5,16 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name="Teachers")
+@Table(name = "Teachers")
 public class Teacher {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
+    @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
     private String surname;
 
     @OneToMany
@@ -38,7 +39,19 @@ public class Teacher {
         return subjects;
     }
 
-    public void addSubject(Subject subject){
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void addSubject(Subject subject) {
         this.subjects.add(subject);
         subject.getTeachers().add(this);
     }

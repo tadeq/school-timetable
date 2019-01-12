@@ -6,8 +6,11 @@ import java.util.List;
 @Entity
 @Table(name = "Classrooms")
 public class Classroom {
-
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Column(unique = true, nullable = false)
     private String number;
 
     @OneToMany
@@ -18,6 +21,10 @@ public class Classroom {
 
     public Classroom(String number) {
         this.number = number;
+    }
+
+    public String getNumber() {
+        return number;
     }
 
     public List<Lesson> getLessons() {

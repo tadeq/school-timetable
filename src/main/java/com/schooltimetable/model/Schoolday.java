@@ -7,12 +7,21 @@ import java.util.List;
 @Table(name = "Schooldays")
 public class Schoolday {
     @Id
-    private String weekday;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Column(unique = true, nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Weekday weekday;
 
     @OneToMany(mappedBy = "schoolday")
     private List<Lesson> lessons;
 
     public Schoolday() {
+    }
+
+    public Schoolday(Weekday weekday) {
+        this.weekday = weekday;
     }
 
     public List<Lesson> getLessons() {

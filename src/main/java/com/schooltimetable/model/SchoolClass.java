@@ -6,8 +6,11 @@ import java.util.List;
 @Entity
 @Table(name = "Classes")
 public class SchoolClass {
-
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Column(unique = true, nullable = false)
     private String name;
 
     @OneToMany(mappedBy = "schoolClass")
@@ -16,7 +19,15 @@ public class SchoolClass {
     public SchoolClass() {
     }
 
-    public SchoolClass(String name){
+    public SchoolClass(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
         this.name = name;
     }
 

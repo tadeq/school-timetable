@@ -5,6 +5,7 @@ import org.hibernate.Transaction;
 import com.schooltimetable.service.SessionService;
 
 import java.util.List;
+import java.util.Optional;
 
 public abstract class Dao<T, Id> {
     public void save(T t) {
@@ -28,7 +29,7 @@ public abstract class Dao<T, Id> {
         transaction.commit();
     }
 
-    public abstract T findById(Id id);
+    public abstract Optional<T> findById(Id id);
 
     public abstract List<T> findAll();
 }

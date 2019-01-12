@@ -7,8 +7,11 @@ import java.util.Set;
 @Entity
 @Table(name = "Subjects")
 public class Subject {
-
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Column(unique = true, nullable = false)
     private String name;
 
     @OneToMany(mappedBy = "subject")
@@ -30,5 +33,10 @@ public class Subject {
 
     public Set<Teacher> getTeachers() {
         return teachers;
+    }
+
+    public void addTeacher(Teacher teacher) {
+        this.teachers.add(teacher);
+        teacher.getSubjects().add(this);
     }
 }
