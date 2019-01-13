@@ -23,6 +23,10 @@ public class Classroom {
         this.number = number;
     }
 
+    public Integer getId() {
+        return id;
+    }
+
     public String getNumber() {
         return number;
     }

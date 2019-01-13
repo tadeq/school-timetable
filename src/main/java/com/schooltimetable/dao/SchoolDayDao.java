@@ -1,22 +1,23 @@
 package com.schooltimetable.dao;
 
-import com.schooltimetable.model.Subject;
+import com.schooltimetable.model.SchoolDay;
+import com.schooltimetable.model.Weekday;
+import com.schooltimetable.service.SessionService;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import com.schooltimetable.service.SessionService;
 
 import javax.persistence.PersistenceException;
 import java.util.List;
 import java.util.Optional;
 
-public class SubjectDao extends Dao<Subject> {
-    public Optional<Subject> create(String name) {
+public class SchoolDayDao extends Dao<SchoolDay> {
+    public Optional<SchoolDay> create(Weekday weekday) {
         Session session = SessionService.getSession();
         Transaction transaction = session.beginTransaction();
         try {
-            save(new Subject(name));
+            save(new SchoolDay(weekday));
             transaction.commit();
-            return findByName(name);
+            return findByWeekday(weekday);
         } catch (PersistenceException e) {
             e.printStackTrace();
             transaction.rollback();
@@ -25,14 +26,14 @@ public class SubjectDao extends Dao<Subject> {
     }
 
     @Override
-    public Optional<Subject> findById(Integer id) {
+    public Optional<SchoolDay> findById(Integer id) {
         Transaction transaction = SessionService.getSession().beginTransaction();
         try {
-            Subject subject = SessionService.getSession()
-                    .createQuery("SELECT s FROM Subject s WHERE s.id = :id", Subject.class)
+            SchoolDay schoolDay = SessionService.getSession()
+                    .createQuery("SELECT sd FROM SchoolDay sd WHERE sd.id = :id", SchoolDay.class)
                     .setParameter("id", id)
                     .getSingleResult();
-            return Optional.of(subject);
+            return Optional.of(schoolDay);
         } catch (PersistenceException e) {
             e.printStackTrace();
             return Optional.empty();
@@ -42,22 +43,22 @@ public class SubjectDao extends Dao<Subject> {
     }
 
     @Override
-    public List<Subject> findAll() {
+    public List<SchoolDay> findAll() {
         Transaction transaction = SessionService.getSession().beginTransaction();
-        List<Subject> subjects = SessionService.getSession()
-                .createQuery("SELECT s FROM Subject s", Subject.class).getResultList();
+        List<SchoolDay> schoolDays = SessionService.getSession()
+                .createQuery("SELECT sd FROM SchoolDay sd", SchoolDay.class)
+                .getResultList();
         transaction.commit();
-        return subjects;
+        return schoolDays;
     }
 
-    public Optional<Subject> findByName(String name) {
+    public Optional<SchoolDay> findByWeekday(Weekday weekday) {
         Transaction transaction = SessionService.getSession().beginTransaction();
         try {
-            Subject subject = SessionService.getSession()
-                    .createQuery("SELECT s FROM Subject s WHERE s.name = :name", Subject.class)
-                    .setParameter("name", name)
+            SchoolDay schoolDay = SessionService.getSession().createQuery("SELECT sd FROM SchoolDay sd WHERE sd.weekday = :weekday", SchoolDay.class)
+                    .setParameter("weekday", weekday)
                     .getSingleResult();
-            return Optional.of(subject);
+            return Optional.of(schoolDay);
         } catch (PersistenceException e) {
             e.printStackTrace();
             return Optional.empty();

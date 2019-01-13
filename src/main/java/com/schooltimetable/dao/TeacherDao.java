@@ -1,6 +1,7 @@
 package com.schooltimetable.dao;
 
 import com.schooltimetable.model.Teacher;
+import org.hibernate.Session;
 import org.hibernate.Transaction;
 import com.schooltimetable.service.SessionService;
 
@@ -8,11 +9,20 @@ import javax.persistence.PersistenceException;
 import java.util.List;
 import java.util.Optional;
 
-public class TeacherDao extends Dao<Teacher, Integer> {
+public class TeacherDao extends Dao<Teacher> {
     public Optional<Teacher> create(String name, String surname) {
-        save(new Teacher(name, surname));
-        List<Teacher> teachers = findByNameSurname(name, surname);
-        return teachers.isEmpty() ? Optional.empty() : Optional.of(teachers.get(teachers.size() - 1));
+        Session session = SessionService.getSession();
+        Transaction transaction = session.beginTransaction();
+        try {
+            save(new Teacher(name, surname));
+            transaction.commit();
+            List<Teacher> teachers = findByNameSurname(name, surname);
+            return teachers.isEmpty() ? Optional.empty() : Optional.of(teachers.get(teachers.size() - 1));
+        } catch (PersistenceException e) {
+            e.printStackTrace();
+            transaction.rollback();
+            return Optional.empty();
+        }
     }
 
     @Override

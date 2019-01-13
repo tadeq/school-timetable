@@ -10,9 +10,8 @@ public class Lesson {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "schooldayId")
-    @Column(nullable = false)
-    private Schoolday schoolday;
+    @JoinColumn(name = "schooldayId", nullable = false)
+    private SchoolDay schoolDay;
 
     @Column(nullable = false)
     private Integer number;
@@ -26,8 +25,7 @@ public class Lesson {
     private Teacher teacher;
 
     @ManyToOne
-    @JoinColumn(name = "schoolClassId")
-    @Column(nullable = false)
+    @JoinColumn(name = "schoolClassId", nullable = false)
     private SchoolClass schoolClass;
 
     @ManyToOne
@@ -37,14 +35,14 @@ public class Lesson {
     public Lesson() {
     }
 
-    public Lesson(Schoolday schoolday, int number, SchoolClass schoolClass) {
-        this.schoolday = schoolday;
+    public Lesson(SchoolDay schoolDay, int number, SchoolClass schoolClass) {
+        this.schoolDay = schoolDay;
         this.number = number;
         this.schoolClass = schoolClass;
     }
 
-    public Lesson(Schoolday schoolday, int number, Subject subject, Teacher teacher, SchoolClass schoolClass, Classroom classroom) {
-        this.schoolday = schoolday;
+    public Lesson(SchoolDay schoolDay, int number, Subject subject, Teacher teacher, SchoolClass schoolClass, Classroom classroom) {
+        this.schoolDay = schoolDay;
         this.number = number;
         this.subject = subject;
         this.teacher = teacher;
@@ -56,8 +54,8 @@ public class Lesson {
         return this.id;
     }
 
-    public Schoolday getSchoolday() {
-        return schoolday;
+    public SchoolDay getSchoolDay() {
+        return schoolDay;
     }
 
     public int getNumber() {

@@ -1,35 +1,47 @@
 package com.schooltimetable.dao;
 
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import com.schooltimetable.service.SessionService;
+import org.hibernate.Transaction;
 
+import javax.persistence.PersistenceException;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class Dao<T, Id> {
-    public void save(T t) {
+public abstract class Dao<T> {
+    public void save(T t) throws PersistenceException {
         Session session = SessionService.getSession();
-        Transaction transaction = session.beginTransaction();
         session.save(t);
-        transaction.commit();
+        session.merge(t);
     }
 
-    public void update(T t) {
+    public void update(T t) throws PersistenceException {
         Session session = SessionService.getSession();
-        Transaction transaction = session.beginTransaction();
         session.update(t);
-        transaction.commit();
+        session.merge(t);
     }
 
-    public void delete(T t) {
+    public void delete(T t) throws PersistenceException {
         Session session = SessionService.getSession();
-        Transaction transaction = session.beginTransaction();
         session.delete(t);
-        transaction.commit();
     }
 
-    public abstract Optional<T> findById(Id id);
+    public void deleteAll() {
+        Session session = SessionService.getSession();
+        List<T> elements = findAll();
+        Transaction transaction = session.beginTransaction();
+        try {
+            for (T t : elements) {
+                delete(t);
+            }
+            transaction.commit();
+        } catch (PersistenceException e) {
+            e.printStackTrace();
+            transaction.rollback();
+        }
+    }
+
+    public abstract Optional<T> findById(Integer id);
 
     public abstract List<T> findAll();
 }

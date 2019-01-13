@@ -2,7 +2,8 @@ package com.schooltimetable.dao;
 
 import com.schooltimetable.model.Lesson;
 import com.schooltimetable.model.SchoolClass;
-import com.schooltimetable.model.Schoolday;
+import com.schooltimetable.model.SchoolDay;
+import org.hibernate.Session;
 import org.hibernate.Transaction;
 import com.schooltimetable.service.SessionService;
 
@@ -10,10 +11,19 @@ import javax.persistence.PersistenceException;
 import java.util.List;
 import java.util.Optional;
 
-public class LessonDao extends Dao<Lesson, Integer> {
-    public Optional<Lesson> create(Schoolday schoolday, int number, SchoolClass schoolClass) {
-        save(new Lesson(schoolday, number, schoolClass));
-        return findByDayNumberClass(schoolday, number, schoolClass);
+public class LessonDao extends Dao<Lesson> {
+    public Optional<Lesson> create(SchoolDay schoolday, int number, SchoolClass schoolClass) {
+        Session session = SessionService.getSession();
+        Transaction transaction = session.beginTransaction();
+        try {
+            save(new Lesson(schoolday, number, schoolClass));
+            transaction.commit();
+            return findByDayNumberClass(schoolday, number, schoolClass);
+        } catch (PersistenceException e) {
+            e.printStackTrace();
+            transaction.rollback();
+            return Optional.empty();
+        }
     }
 
     @Override
@@ -43,12 +53,12 @@ public class LessonDao extends Dao<Lesson, Integer> {
         return lessons;
     }
 
-    public Optional<Lesson> findByDayNumberClass(Schoolday schoolday, int number, SchoolClass schoolClass) {
+    public Optional<Lesson> findByDayNumberClass(SchoolDay schoolDay, int number, SchoolClass schoolClass) {
         Transaction transaction = SessionService.getSession().beginTransaction();
         try {
             Lesson lesson = SessionService.getSession()
-                    .createQuery("SELECT l FROM Lesson l WHERE l.schoolday = :schoolday AND l.number = :number AND l.schoolClass = :schoolClass", Lesson.class)
-                    .setParameter("schoolday", schoolday)
+                    .createQuery("SELECT l FROM Lesson l WHERE l.schoolDay = :schoolday AND l.number = :number AND l.schoolClass = :schoolClass", Lesson.class)
+                    .setParameter("schoolDay", schoolDay)
                     .setParameter("number", number)
                     .setParameter("schoolClass", schoolClass)
                     .getSingleResult();

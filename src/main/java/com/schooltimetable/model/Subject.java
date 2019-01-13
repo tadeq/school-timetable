@@ -27,6 +27,10 @@ public class Subject {
         this.name = name;
     }
 
+    public Integer getId() {
+        return id;
+    }
+
     public List<Lesson> getLessons() {
         return lessons;
     }

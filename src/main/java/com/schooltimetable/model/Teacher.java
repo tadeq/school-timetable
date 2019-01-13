@@ -31,16 +31,16 @@ public class Teacher {
         this.surname = surname;
     }
 
+    public int getId() {
+        return id;
+    }
+
     public List<Lesson> getLessons() {
         return lessons;
     }
 
     public Set<Subject> getSubjects() {
         return subjects;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public String getName() {

@@ -5,7 +5,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "Schooldays")
-public class Schoolday {
+public class SchoolDay {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -14,14 +14,22 @@ public class Schoolday {
     @Enumerated(EnumType.STRING)
     private Weekday weekday;
 
-    @OneToMany(mappedBy = "schoolday")
+    @OneToMany(mappedBy = "schoolDay")
     private List<Lesson> lessons;
 
-    public Schoolday() {
+    public SchoolDay() {
     }
 
-    public Schoolday(Weekday weekday) {
+    public SchoolDay(Weekday weekday) {
         this.weekday = weekday;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public Weekday getWeekday() {
+        return weekday;
     }
 
     public List<Lesson> getLessons() {
