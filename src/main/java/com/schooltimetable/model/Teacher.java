@@ -1,8 +1,8 @@
 package com.schooltimetable.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "Teachers")
@@ -17,11 +17,11 @@ public class Teacher {
     @Column(nullable = false)
     private String surname;
 
-    @OneToMany
+    @OneToMany(mappedBy = "teacher")
     private List<Lesson> lessons;
 
-    @ManyToMany
-    private Set<Subject> subjects;
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
+    private List<Subject> subjects;
 
     public Teacher() {
     }
@@ -29,6 +29,8 @@ public class Teacher {
     public Teacher(String name, String surname) {
         this.name = name;
         this.surname = surname;
+        this.lessons = new ArrayList<>();
+        this.subjects = new ArrayList<>();
     }
 
     public int getId() {
@@ -39,7 +41,7 @@ public class Teacher {
         return lessons;
     }
 
-    public Set<Subject> getSubjects() {
+    public List<Subject> getSubjects() {
         return subjects;
     }
 

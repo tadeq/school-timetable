@@ -25,8 +25,7 @@ public class SchoolDayDaoTest {
     }
 
     @Test
-    public void createSchooldayTest() {
-        System.out.println(schoolDayDao.findAll().size());
+    public void createSchoolDayTest() {
         Optional<SchoolDay> schoolDay1 = schoolDayDao.create(Weekday.MONDAY);
         checkSchoolday(schoolDay1);
         Optional<SchoolDay> schoolDay2 = schoolDayDao.create(Weekday.FRIDAY);
@@ -38,7 +37,7 @@ public class SchoolDayDaoTest {
     }
 
     @Test
-    public void findSchooldayTest() {
+    public void findSchoolDayTest() {
         Optional<SchoolDay> schoolDay1 = schoolDayDao.create(Weekday.MONDAY);
         checkSchoolday(schoolDay1);
         Optional<SchoolDay> schoolDay2 = schoolDayDao.findByWeekday(Weekday.TUESDAY);
@@ -51,6 +50,19 @@ public class SchoolDayDaoTest {
         assertEquals(schoolDay1.get(), schoolDay2.get());
         schoolDayDao.create(Weekday.TUESDAY);
         assertEquals(2, schoolDayDao.findAll().size());
+    }
+
+    @Test
+    public void deleteSchoolDayTest() {
+        Optional<SchoolDay> schoolDay1 = schoolDayDao.create(Weekday.FRIDAY);
+        checkSchoolday(schoolDay1);
+        Optional<SchoolDay> schoolDay2 = schoolDayDao.create(Weekday.THURSDAY);
+        checkSchoolday(schoolDay2);
+        assertEquals(2, schoolDayDao.findAll().size());
+        schoolDayDao.deleteOne(schoolDay1.get());
+        assertEquals(1, schoolDayDao.findAll().size());
+        schoolDayDao.deleteAll();
+        assertEquals(0, schoolDayDao.findAll().size());
     }
 
     private void checkSchoolday(Optional<SchoolDay> schoolDay) {

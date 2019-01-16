@@ -9,21 +9,33 @@ import java.util.List;
 import java.util.Optional;
 
 public abstract class Dao<T> {
-    public void save(T t) throws PersistenceException {
+    protected void save(T t) throws PersistenceException {
         Session session = SessionService.getSession();
         session.save(t);
         session.merge(t);
     }
 
-    public void update(T t) throws PersistenceException {
+    protected void update(T t) throws PersistenceException {
         Session session = SessionService.getSession();
         session.update(t);
         session.merge(t);
     }
 
-    public void delete(T t) throws PersistenceException {
+    protected void delete(T t) throws PersistenceException {
         Session session = SessionService.getSession();
         session.delete(t);
+    }
+
+    public void deleteOne(T t) {
+        Session session = SessionService.getSession();
+        Transaction transaction = session.beginTransaction();
+        try {
+            delete(t);
+            transaction.commit();
+        } catch (PersistenceException e) {
+            e.printStackTrace();
+            transaction.rollback();
+        }
     }
 
     public void deleteAll() {

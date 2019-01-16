@@ -1,5 +1,6 @@
 package com.schooltimetable.dao;
 
+import com.schooltimetable.model.Subject;
 import com.schooltimetable.model.Teacher;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -60,5 +61,23 @@ public class TeacherDao extends Dao<Teacher> {
                 .getResultList();
         transaction.commit();
         return teachers;
+    }
+
+    public boolean addSubject(Teacher teacher, Subject subject) {
+        Transaction transaction = SessionService.getSession().beginTransaction();
+        try {
+            if (teacher.getSubjects().contains(subject)) {
+                transaction.commit();
+                return false;
+            }
+            teacher.addSubject(subject);
+            update(teacher);
+            transaction.commit();
+            return true;
+        } catch (PersistenceException e) {
+            e.printStackTrace();
+            transaction.rollback();
+            return false;
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.schooltimetable.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,6 +23,7 @@ public class SchoolDay {
 
     public SchoolDay(Weekday weekday) {
         this.weekday = weekday;
+        this.lessons = new ArrayList<>();
     }
 
     public Integer getId() {
@@ -34,5 +36,9 @@ public class SchoolDay {
 
     public List<Lesson> getLessons() {
         return lessons;
+    }
+
+    public void addLesson(Lesson lesson) {
+        lesson.setSchoolDay(this);
     }
 }

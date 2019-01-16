@@ -1,6 +1,7 @@
 package com.schooltimetable.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -21,6 +22,7 @@ public class Classroom {
 
     public Classroom(String number) {
         this.number = number;
+        this.lessons = new ArrayList<>();
     }
 
     public Integer getId() {

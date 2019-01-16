@@ -1,8 +1,6 @@
 package com.schooltimetable.dao;
 
-import com.schooltimetable.model.Lesson;
-import com.schooltimetable.model.SchoolClass;
-import com.schooltimetable.model.SchoolDay;
+import com.schooltimetable.model.*;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import com.schooltimetable.service.SessionService;
@@ -57,7 +55,7 @@ public class LessonDao extends Dao<Lesson> {
         Transaction transaction = SessionService.getSession().beginTransaction();
         try {
             Lesson lesson = SessionService.getSession()
-                    .createQuery("SELECT l FROM Lesson l WHERE l.schoolDay = :schoolday AND l.number = :number AND l.schoolClass = :schoolClass", Lesson.class)
+                    .createQuery("SELECT l FROM Lesson l WHERE l.schoolDay = :schoolDay AND l.number = :number AND l.schoolClass = :schoolClass", Lesson.class)
                     .setParameter("schoolDay", schoolDay)
                     .setParameter("number", number)
                     .setParameter("schoolClass", schoolClass)
@@ -68,6 +66,66 @@ public class LessonDao extends Dao<Lesson> {
             return Optional.empty();
         } finally {
             transaction.commit();
+        }
+    }
+
+    public boolean setSubject(Lesson lesson, Subject subject) {
+        Transaction transaction = SessionService.getSession().beginTransaction();
+        try {
+            lesson.setSubject(subject);
+            update(lesson);
+            transaction.commit();
+            return true;
+        } catch (PersistenceException e) {
+            e.printStackTrace();
+            transaction.rollback();
+            return false;
+        }
+    }
+
+    public boolean setTeacher(Lesson lesson, Teacher teacher) {
+        Transaction transaction = SessionService.getSession().beginTransaction();
+        try {
+            if (!lesson.getSubject().getTeachers().contains(teacher)) {
+                transaction.rollback();
+                return false;
+            }
+            lesson.setTeacher(teacher);
+            update(lesson);
+            transaction.commit();
+            return true;
+        } catch (PersistenceException e) {
+            e.printStackTrace();
+            transaction.rollback();
+            return false;
+        }
+    }
+
+    public boolean setSchoolClass(Lesson lesson, SchoolClass schoolClass) {
+        Transaction transaction = SessionService.getSession().beginTransaction();
+        try {
+            lesson.setSchoolClass(schoolClass);
+            update(lesson);
+            transaction.commit();
+            return true;
+        } catch (PersistenceException e) {
+            e.printStackTrace();
+            transaction.rollback();
+            return false;
+        }
+    }
+
+    public boolean setClassroom(Lesson lesson, Classroom classroom) {
+        Transaction transaction = SessionService.getSession().beginTransaction();
+        try {
+            lesson.setClassroom(classroom);
+            update(lesson);
+            transaction.commit();
+            return true;
+        } catch (PersistenceException e) {
+            e.printStackTrace();
+            transaction.rollback();
+            return false;
         }
     }
 }

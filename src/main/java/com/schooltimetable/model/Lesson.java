@@ -3,13 +3,13 @@ package com.schooltimetable.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Lessons")
+@Table(name = "Lessons", uniqueConstraints = @UniqueConstraint(columnNames = {"schooldayId", "number", "schoolClassId"}))
 public class Lesson {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(name = "schooldayId", nullable = false)
     private SchoolDay schoolDay;
 
@@ -24,7 +24,7 @@ public class Lesson {
     @JoinColumn(name = "teacherId")
     private Teacher teacher;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(name = "schoolClassId", nullable = false)
     private SchoolClass schoolClass;
 
@@ -37,8 +37,10 @@ public class Lesson {
 
     public Lesson(SchoolDay schoolDay, int number, SchoolClass schoolClass) {
         this.schoolDay = schoolDay;
+        schoolDay.getLessons().add(this);
         this.number = number;
         this.schoolClass = schoolClass;
+        schoolClass.getLessons().add(this);
     }
 
     public Lesson(SchoolDay schoolDay, int number, Subject subject, Teacher teacher, SchoolClass schoolClass, Classroom classroom) {
@@ -50,7 +52,7 @@ public class Lesson {
         this.classroom = classroom;
     }
 
-    public int getId() {
+    public Integer getId() {
         return this.id;
     }
 
@@ -58,7 +60,7 @@ public class Lesson {
         return schoolDay;
     }
 
-    public int getNumber() {
+    public Integer getNumber() {
         return number;
     }
 
@@ -76,6 +78,11 @@ public class Lesson {
 
     public Classroom getClassroom() {
         return classroom;
+    }
+
+    public void setSchoolDay(SchoolDay schoolDay) {
+        this.schoolDay = schoolDay;
+        schoolDay.getLessons().add(this);
     }
 
     public void setSubject(Subject subject) {
