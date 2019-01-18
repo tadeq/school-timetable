@@ -26,19 +26,20 @@ public abstract class Dao<T> {
         session.delete(t);
     }
 
-    public void deleteOne(T t) {
+    public boolean deleteOne(T t) {
         Session session = SessionService.getSession();
         Transaction transaction = session.beginTransaction();
         try {
             delete(t);
             transaction.commit();
+            return true;
         } catch (PersistenceException e) {
-            e.printStackTrace();
             transaction.rollback();
+            return false;
         }
     }
 
-    public void deleteAll() {
+    public boolean deleteAll() {
         Session session = SessionService.getSession();
         List<T> elements = findAll();
         Transaction transaction = session.beginTransaction();
@@ -47,9 +48,10 @@ public abstract class Dao<T> {
                 delete(t);
             }
             transaction.commit();
+            return true;
         } catch (PersistenceException e) {
-            e.printStackTrace();
             transaction.rollback();
+            return false;
         }
     }
 

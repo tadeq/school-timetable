@@ -20,7 +20,6 @@ public class TeacherDao extends Dao<Teacher> {
             List<Teacher> teachers = findByNameSurname(name, surname);
             return teachers.isEmpty() ? Optional.empty() : Optional.of(teachers.get(teachers.size() - 1));
         } catch (PersistenceException e) {
-            e.printStackTrace();
             transaction.rollback();
             return Optional.empty();
         }
@@ -36,7 +35,6 @@ public class TeacherDao extends Dao<Teacher> {
                     .getSingleResult();
             return Optional.of(teacher);
         } catch (PersistenceException e) {
-            e.printStackTrace();
             return Optional.empty();
         } finally {
             transaction.commit();
@@ -75,7 +73,6 @@ public class TeacherDao extends Dao<Teacher> {
             transaction.commit();
             return true;
         } catch (PersistenceException e) {
-            e.printStackTrace();
             transaction.rollback();
             return false;
         }

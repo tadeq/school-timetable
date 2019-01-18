@@ -1,5 +1,6 @@
 import com.schooltimetable.dao.ClassroomDao;
 import com.schooltimetable.model.Classroom;
+import com.schooltimetable.model.Weekday;
 import com.schooltimetable.service.SessionService;
 import org.junit.After;
 import org.junit.Before;
@@ -58,9 +59,9 @@ public class ClassroomDaoTest {
         Optional<Classroom> classroom2 = classroomDao.create("3.30");
         checkClassroom(classroom2);
         assertEquals(2, classroomDao.findAll().size());
-        classroomDao.deleteOne(classroom1.get());
+        assertTrue(classroomDao.deleteOne(classroom1.get()));
         assertEquals(1, classroomDao.findAll().size());
-        classroomDao.deleteAll();
+        assertTrue(classroomDao.deleteAll());
         assertEquals(0, classroomDao.findAll().size());
     }
 

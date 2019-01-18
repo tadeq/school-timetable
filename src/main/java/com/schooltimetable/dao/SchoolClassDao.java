@@ -18,7 +18,6 @@ public class SchoolClassDao extends Dao<SchoolClass> {
             transaction.commit();
             return findByName(name);
         } catch (PersistenceException e) {
-            e.printStackTrace();
             transaction.rollback();
             return Optional.empty();
         }
@@ -34,7 +33,6 @@ public class SchoolClassDao extends Dao<SchoolClass> {
                     .getSingleResult();
             return Optional.of(schoolClass);
         } catch (PersistenceException e) {
-            e.printStackTrace();
             return Optional.empty();
         } finally {
             transaction.commit();
@@ -60,7 +58,6 @@ public class SchoolClassDao extends Dao<SchoolClass> {
                     .getSingleResult();
             return Optional.of(schoolClass);
         } catch (PersistenceException e) {
-            e.printStackTrace();
             return Optional.empty();
         } finally {
             transaction.commit();

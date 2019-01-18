@@ -1,8 +1,5 @@
 import com.schooltimetable.dao.*;
-import com.schooltimetable.model.Lesson;
-import com.schooltimetable.model.SchoolClass;
-import com.schooltimetable.model.SchoolDay;
-import com.schooltimetable.model.Weekday;
+import com.schooltimetable.model.*;
 import com.schooltimetable.service.SessionService;
 import org.junit.After;
 import org.junit.Before;
@@ -46,11 +43,62 @@ public class LessonDaoComplexTest {
         assertTrue(schoolClass.isPresent());
         Optional<Lesson> lesson1 = lessonDao.create(schoolDay.get(), 1, schoolClass.get());
         checkLesson(lesson1);
+        Optional<Lesson> lesson2 = lessonDao.create(schoolDay.get(), 1, schoolClass.get());
+        assertFalse(lesson2.isPresent());
     }
 
     @Test
     public void addLessonPropertiesTest() {
+        Optional<SchoolDay> schoolDay = schoolDayDao.create(Weekday.THURSDAY);
+        Optional<SchoolClass> schoolClass = schoolClassDao.create("3A");
+        assertTrue(schoolDay.isPresent());
+        assertTrue(schoolClass.isPresent());
+        Optional<Lesson> lesson = lessonDao.create(schoolDay.get(), 1, schoolClass.get());
+        checkLesson(lesson);
+        Optional<Teacher> teacher = teacherDao.create("John", "Doe");
+        Optional<Subject> subject = subjectDao.create("Maths");
+        assertTrue(subject.isPresent());
+        assertTrue(teacher.isPresent());
+        checkLesson(lesson);
+        Lesson lesson1 = lesson.get();
+        Teacher teacher1 = teacher.get();
+        Subject subject1 = subject.get();
+        lessonDao.setSubject(lesson1, subject1);
+        lessonDao.setTeacher(lesson1, teacher1);
+        assertEquals(teacher1, lesson1.getTeacher());
+        assertEquals(subject1, lesson1.getSubject());
+        assertFalse(teacher1.getLessons().isEmpty());
+        assertFalse(subject1.getLessons().isEmpty());
+        teacher = teacherDao.create("Jane", "Doe");
+        Teacher teacher2 = teacher.get();
+        lesson1.setTeacher(teacher2);
+        assertTrue(teacher1.getLessons().isEmpty());
+        assertFalse(teacher2.getLessons().isEmpty());
+    }
 
+    @Test
+    public void deleteLessonTest() {
+        Optional<SchoolDay> schoolDay = schoolDayDao.create(Weekday.THURSDAY);
+        Optional<SchoolClass> schoolClass = schoolClassDao.create("3A");
+        assertTrue(schoolDay.isPresent());
+        assertTrue(schoolClass.isPresent());
+        Optional<Lesson> lesson = lessonDao.create(schoolDay.get(), 1, schoolClass.get());
+        checkLesson(lesson);
+        Optional<Teacher> teacher = teacherDao.create("John", "Doe");
+        Optional<Subject> subject = subjectDao.create("Maths");
+        assertTrue(subject.isPresent());
+        assertTrue(teacher.isPresent());
+        checkLesson(lesson);
+        Lesson lesson1 = lesson.get();
+        Teacher teacher1 = teacher.get();
+        Subject subject1 = subject.get();
+        lessonDao.setSubject(lesson1, subject1);
+        lessonDao.setTeacher(lesson1, teacher1);
+        lessonDao.deleteOne(lesson1);
+        System.out.println(lesson1);
+        System.out.println(teacher1.getLessons());
+        assertTrue(teacher1.getLessons().isEmpty());
+        assertTrue(subject1.getLessons().isEmpty());
     }
 
     private void checkLesson(Optional<Lesson> lesson) {

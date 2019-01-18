@@ -59,9 +59,9 @@ public class SchoolDayDaoTest {
         Optional<SchoolDay> schoolDay2 = schoolDayDao.create(Weekday.THURSDAY);
         checkSchoolday(schoolDay2);
         assertEquals(2, schoolDayDao.findAll().size());
-        schoolDayDao.deleteOne(schoolDay1.get());
+        assertTrue(schoolDayDao.deleteOne(schoolDay1.get()));
         assertEquals(1, schoolDayDao.findAll().size());
-        schoolDayDao.deleteAll();
+        assertTrue(schoolDayDao.deleteAll());
         assertEquals(0, schoolDayDao.findAll().size());
     }
 

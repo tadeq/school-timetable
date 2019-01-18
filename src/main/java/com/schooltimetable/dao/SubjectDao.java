@@ -19,7 +19,6 @@ public class SubjectDao extends Dao<Subject> {
             transaction.commit();
             return findByName(name);
         } catch (PersistenceException e) {
-            e.printStackTrace();
             transaction.rollback();
             return Optional.empty();
         }
@@ -35,7 +34,6 @@ public class SubjectDao extends Dao<Subject> {
                     .getSingleResult();
             return Optional.of(subject);
         } catch (PersistenceException e) {
-            e.printStackTrace();
             return Optional.empty();
         } finally {
             transaction.commit();
@@ -60,7 +58,6 @@ public class SubjectDao extends Dao<Subject> {
                     .getSingleResult();
             return Optional.of(subject);
         } catch (PersistenceException e) {
-            e.printStackTrace();
             return Optional.empty();
         } finally {
             transaction.commit();
@@ -79,7 +76,6 @@ public class SubjectDao extends Dao<Subject> {
             transaction.commit();
             return true;
         } catch (PersistenceException e) {
-            e.printStackTrace();
             transaction.rollback();
             return false;
         }

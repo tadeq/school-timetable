@@ -48,6 +48,17 @@ public class SubjectTeacherIntTest {
         assertEquals(1, teacherDao.findByNameSurname("John", "Doe").size());
     }
 
+    @Test
+    public void removeTeacherTest() {
+        Optional<Teacher> teacher1 = teacherDao.create("John", "Smith");
+        checkTeacher(teacher1);
+        Optional<Subject> subject1 = subjectDao.create("Maths");
+        checkSubject(subject1);
+        assertTrue(subjectDao.addTeacher(subject1.get(), teacher1.get()));
+        assertTrue(teacherDao.deleteOne(teacher1.get()));
+        assertTrue(subject1.get().getTeachers().isEmpty());
+    }
+
     private void checkTeacher(Optional<Teacher> teacher) {
         assertTrue(teacher.isPresent());
         teacher.ifPresent(t -> {

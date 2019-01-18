@@ -49,4 +49,14 @@ public class Subject {
         this.teachers.add(teacher);
         teacher.getSubjects().add(this);
     }
+
+    @PreRemove
+    public void onRemove() {
+        for (Lesson lesson : lessons) {
+            lesson.setSubject(null);
+        }
+        for (Teacher teacher : teachers) {
+            teacher.getSubjects().remove(this);
+        }
+    }
 }

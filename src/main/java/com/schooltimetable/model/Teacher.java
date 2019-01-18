@@ -57,4 +57,14 @@ public class Teacher {
         this.subjects.add(subject);
         subject.getTeachers().add(this);
     }
+
+    @PreRemove
+    public void onRemove() {
+        for (Lesson lesson : lessons) {
+            lesson.setTeacher(null);
+        }
+        for (Subject subject : subjects) {
+            subject.getTeachers().remove(this);
+        }
+    }
 }

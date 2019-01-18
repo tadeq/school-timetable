@@ -18,7 +18,6 @@ public class ClassroomDao extends Dao<Classroom> {
             transaction.commit();
             return findByNumber(number);
         } catch (PersistenceException e) {
-            e.printStackTrace();
             transaction.rollback();
             return Optional.empty();
         }
@@ -34,7 +33,6 @@ public class ClassroomDao extends Dao<Classroom> {
                     .getSingleResult();
             return Optional.of(classroom);
         } catch (PersistenceException e) {
-            e.printStackTrace();
             return Optional.empty();
         } finally {
             transaction.commit();
@@ -59,7 +57,6 @@ public class ClassroomDao extends Dao<Classroom> {
                     .getSingleResult();
             return Optional.of(classroom);
         } catch (PersistenceException e) {
-            e.printStackTrace();
             return Optional.empty();
         } finally {
             transaction.commit();

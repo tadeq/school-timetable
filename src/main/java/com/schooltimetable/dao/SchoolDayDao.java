@@ -19,7 +19,6 @@ public class SchoolDayDao extends Dao<SchoolDay> {
             transaction.commit();
             return findByWeekday(weekday);
         } catch (PersistenceException e) {
-            e.printStackTrace();
             transaction.rollback();
             return Optional.empty();
         }
@@ -35,7 +34,6 @@ public class SchoolDayDao extends Dao<SchoolDay> {
                     .getSingleResult();
             return Optional.of(schoolDay);
         } catch (PersistenceException e) {
-            e.printStackTrace();
             return Optional.empty();
         } finally {
             transaction.commit();
@@ -60,7 +58,6 @@ public class SchoolDayDao extends Dao<SchoolDay> {
                     .getSingleResult();
             return Optional.of(schoolDay);
         } catch (PersistenceException e) {
-            e.printStackTrace();
             return Optional.empty();
         } finally {
             transaction.commit();

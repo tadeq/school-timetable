@@ -18,7 +18,6 @@ public class LessonDao extends Dao<Lesson> {
             transaction.commit();
             return findByDayNumberClass(schoolday, number, schoolClass);
         } catch (PersistenceException e) {
-            e.printStackTrace();
             transaction.rollback();
             return Optional.empty();
         }
@@ -34,7 +33,6 @@ public class LessonDao extends Dao<Lesson> {
                     .getSingleResult();
             return Optional.of(lesson);
         } catch (PersistenceException e) {
-            e.printStackTrace();
             return Optional.empty();
         } finally {
             transaction.commit();
@@ -62,7 +60,6 @@ public class LessonDao extends Dao<Lesson> {
                     .getSingleResult();
             return Optional.of(lesson);
         } catch (PersistenceException e) {
-            e.printStackTrace();
             return Optional.empty();
         } finally {
             transaction.commit();
@@ -77,7 +74,6 @@ public class LessonDao extends Dao<Lesson> {
             transaction.commit();
             return true;
         } catch (PersistenceException e) {
-            e.printStackTrace();
             transaction.rollback();
             return false;
         }
@@ -86,16 +82,24 @@ public class LessonDao extends Dao<Lesson> {
     public boolean setTeacher(Lesson lesson, Teacher teacher) {
         Transaction transaction = SessionService.getSession().beginTransaction();
         try {
-            if (!lesson.getSubject().getTeachers().contains(teacher)) {
-                transaction.rollback();
-                return false;
-            }
             lesson.setTeacher(teacher);
             update(lesson);
             transaction.commit();
             return true;
         } catch (PersistenceException e) {
-            e.printStackTrace();
+            transaction.rollback();
+            return false;
+        }
+    }
+
+    public boolean setNumber(Lesson lesson, Integer number) {
+        Transaction transaction = SessionService.getSession().beginTransaction();
+        try {
+            lesson.setNumber(number);
+            update(lesson);
+            transaction.commit();
+            return true;
+        } catch (PersistenceException e) {
             transaction.rollback();
             return false;
         }
@@ -109,7 +113,6 @@ public class LessonDao extends Dao<Lesson> {
             transaction.commit();
             return true;
         } catch (PersistenceException e) {
-            e.printStackTrace();
             transaction.rollback();
             return false;
         }
@@ -123,7 +126,6 @@ public class LessonDao extends Dao<Lesson> {
             transaction.commit();
             return true;
         } catch (PersistenceException e) {
-            e.printStackTrace();
             transaction.rollback();
             return false;
         }
