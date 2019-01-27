@@ -17,7 +17,7 @@ public class LessonDao extends Dao<Lesson> {
             save(new Lesson(schoolday, number, schoolClass));
             transaction.commit();
             return findByDayNumberClass(schoolday, number, schoolClass);
-        } catch (PersistenceException e) {
+        } catch (PersistenceException | IllegalArgumentException e) {
             transaction.rollback();
             return Optional.empty();
         }

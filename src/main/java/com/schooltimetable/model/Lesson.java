@@ -35,7 +35,9 @@ public class Lesson implements Comparable {
     public Lesson() {
     }
 
-    public Lesson(SchoolDay schoolDay, int number, SchoolClass schoolClass) {
+    public Lesson(SchoolDay schoolDay, Integer number, SchoolClass schoolClass) throws IllegalArgumentException {
+        if (schoolClass.getLessons().stream().anyMatch(lesson -> lesson.getSchoolDay().equals(schoolDay) && lesson.getNumber().equals(number)))
+            throw new IllegalArgumentException("This class has another lesson at the same time");
         this.schoolDay = schoolDay;
         schoolDay.getLessons().add(this);
         this.number = number;
@@ -98,37 +100,31 @@ public class Lesson implements Comparable {
         this.subject.getLessons().add(this);
     }
 
-    public void setTeacher(Teacher teacher) {
-        if (teacher.getLessons().stream().anyMatch(lesson -> lesson.compareTo(this) == 0)) {
-            System.out.println("This teacher has another lesson at the same time");
-        } else {
-            if (this.teacher != null)
-                this.teacher.getLessons().remove(this);
-            this.teacher = teacher;
-            this.teacher.getLessons().add(this);
-        }
+    public void setTeacher(Teacher teacher) throws IllegalArgumentException {
+        if (teacher.getLessons().stream().anyMatch(lesson -> lesson.compareTo(this) == 0))
+            throw new IllegalArgumentException("This teacher has another lesson at the same time");
+        if (this.teacher != null)
+            this.teacher.getLessons().remove(this);
+        this.teacher = teacher;
+        this.teacher.getLessons().add(this);
     }
 
-    public void setSchoolClass(SchoolClass schoolClass) {
-        if (schoolClass.getLessons().stream().anyMatch(lesson -> lesson.compareTo(this) == 0)) {
-            System.out.println("This class has another lesson at the same time");
-        } else {
-            if (this.schoolClass != null)
-                this.schoolClass.getLessons().remove(this);
-            this.schoolClass = schoolClass;
-            this.schoolClass.getLessons().add(this);
-        }
+    public void setSchoolClass(SchoolClass schoolClass) throws IllegalArgumentException {
+        if (schoolClass.getLessons().stream().anyMatch(lesson -> lesson.compareTo(this) == 0))
+            throw new IllegalArgumentException("This class has another lesson at the same time");
+        if (this.schoolClass != null)
+            this.schoolClass.getLessons().remove(this);
+        this.schoolClass = schoolClass;
+        this.schoolClass.getLessons().add(this);
     }
 
-    public void setClassroom(Classroom classroom) {
-        if (classroom.getLessons().stream().anyMatch(lesson -> lesson.compareTo(this) == 0)) {
-            System.out.println("Classroom reserved at this time by other lesson");
-        } else {
-            if (this.classroom != null)
-                this.classroom.getLessons().remove(this);
-            this.classroom = classroom;
-            this.classroom.getLessons().add(this);
-        }
+    public void setClassroom(Classroom classroom) throws IllegalArgumentException {
+        if (classroom.getLessons().stream().anyMatch(lesson -> lesson.compareTo(this) == 0))
+            throw new IllegalArgumentException("Classroom reserved at this time by other lesson");
+        if (this.classroom != null)
+            this.classroom.getLessons().remove(this);
+        this.classroom = classroom;
+        this.classroom.getLessons().add(this);
     }
 
     @Override

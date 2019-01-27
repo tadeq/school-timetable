@@ -1,27 +1,29 @@
+package daoTest;
+
 import com.schooltimetable.dao.SubjectDao;
 import com.schooltimetable.dao.TeacherDao;
 import com.schooltimetable.model.Teacher;
 import com.schooltimetable.model.Subject;
 import com.schooltimetable.service.SessionService;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SubjectTeacherIntTest {
     private final SubjectDao subjectDao = new SubjectDao();
 
     private final TeacherDao teacherDao = new TeacherDao();
 
-    @Before
+    @BeforeEach
     public void before() {
         SessionService.openSession();
     }
 
-    @After
+    @AfterEach
     public void after() {
         teacherDao.deleteAll();
         subjectDao.deleteAll();

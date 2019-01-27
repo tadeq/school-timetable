@@ -1,14 +1,16 @@
+package daoTest;
+
 import com.schooltimetable.dao.*;
 import com.schooltimetable.model.*;
 import com.schooltimetable.service.SessionService;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Optional;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class LessonDaoComplexTest {
     private final ClassroomDao classroomDao = new ClassroomDao();
@@ -23,12 +25,12 @@ public class LessonDaoComplexTest {
 
     private final TeacherDao teacherDao = new TeacherDao();
 
-    @Before
+    @BeforeEach
     public void before() {
         SessionService.openSession();
     }
 
-    @After
+    @AfterEach
     public void after() {
         for (Dao dao : Arrays.asList(classroomDao, lessonDao, schoolClassDao, schoolDayDao, subjectDao, teacherDao))
             dao.deleteAll();
@@ -95,8 +97,6 @@ public class LessonDaoComplexTest {
         lessonDao.setSubject(lesson1, subject1);
         lessonDao.setTeacher(lesson1, teacher1);
         lessonDao.deleteOne(lesson1);
-        System.out.println(lesson1);
-        System.out.println(teacher1.getLessons());
         assertTrue(teacher1.getLessons().isEmpty());
         assertTrue(subject1.getLessons().isEmpty());
     }

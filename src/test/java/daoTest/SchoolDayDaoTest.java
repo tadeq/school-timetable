@@ -1,24 +1,26 @@
+package daoTest;
+
 import com.schooltimetable.dao.*;
 import com.schooltimetable.model.SchoolDay;
 import com.schooltimetable.model.Weekday;
 import com.schooltimetable.service.SessionService;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SchoolDayDaoTest {
     private final SchoolDayDao schoolDayDao = new SchoolDayDao();
 
-    @Before
+    @BeforeEach
     public void before() {
         SessionService.openSession();
     }
 
-    @After
+    @AfterEach
     public void after() {
         schoolDayDao.deleteAll();
         SessionService.closeSession();
